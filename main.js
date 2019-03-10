@@ -161,4 +161,4 @@ client.on('message', message => {
 
 });
 
-client.login('NTUyNTU1MjI5Nzk1NzEzMDMx.D2BOxA.LXZq5KFXRh0-MlV16TyKGRwntWc');
+client.login('bot-id-code');
