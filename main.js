@@ -8,11 +8,14 @@ const client = new Discord.Client();
 const fs = require('fs');
 const path = require("path");
 
+const config_file_name = 'config.json';
+
 //config
 config = {
   botname: 'markbot',
   superAdminName: 'MAH313',
   storagefile: 'botdata',
+  botkey: 'key',
 }
 
 //stores all modules
@@ -53,7 +56,7 @@ client.once('ready', () => {
     if (err){
       console.log(err);
     } else {
-      data = JSON.parse(data); //now it an object
+      data = JSON.parse(data); //now it is an object
       appdata = data;
     }
 
@@ -161,4 +164,28 @@ client.on('message', message => {
 
 });
 
-client.login('bot-id-code');
+fs.readFile(config_file_name, 'utf8', function(err, data){
+  if (err){
+    if(err.code == 'ENOENT'){
+      console.log('Creating configuration file, please fill it out');
+
+      fs.writeFile(config_file_name, JSON.stringify({botname: 'markbot', superAdminName: '', storagefile: 'botdata', botkey: ''}), 'utf8', function(err){
+        if (err) throw err;
+      });
+    }
+    else{
+      console.error(err);
+    }
+  } else {
+    data = JSON.parse(data); //now it is an object
+    config = data;
+
+    if(config.botkey && config.botname && config.superAdminName && config.storagefile){
+      client.login(config.botkey);
+    }
+    else{
+      console.error('invalid configuration')
+    }
+    
+  }
+});
