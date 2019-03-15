@@ -8,6 +8,7 @@ module.exports.module_data = {
 
   init: function(){
     commands.push(
+      '--- Game list module ---'
       'markbot open [game] - open een game',
       'markbot join [game] - join een open game',
       'markbot leave [game] - verlaat een open game',

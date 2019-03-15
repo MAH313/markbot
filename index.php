@@ -132,7 +132,7 @@
         catch(error){
         }
 
-        var tr = '<tr><td>'+dates[i].getDate()+'-'+dates[i].getMonth()+'</td>';
+        var tr = '<tr><td>'+dates[i].getDate()+'-'+(dates[i].getMonth()+1)+'</td>';
 
         if(day){
           for(var hour = 0; hour < 24; hour++){
@@ -330,8 +330,8 @@
       makePlayerList(now, lastweek);
       makeChannelList(now, lastweek);
 
-      document.getElementById('from_date').innerHTML = lastweek.getDate()+'-'+lastweek.getMonth()+'-'+lastweek.getFullYear();
-      document.getElementById('to_date').innerHTML = now.getDate()+'-'+now.getMonth()+'-'+now.getFullYear();
+      document.getElementById('from_date').innerHTML = lastweek.getDate()+'-'+(lastweek.getMonth()+1)+'-'+lastweek.getFullYear();
+      document.getElementById('to_date').innerHTML = now.getDate()+'-'+(now.getMonth()+1)+'-'+now.getFullYear();
     }
 
   </script>

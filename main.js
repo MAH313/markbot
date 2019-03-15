@@ -56,7 +56,7 @@ client.once('ready', () => {
     if (err){
       console.log(err);
     } else {
-      data = JSON.parse(data); //now it is an object
+      data = JSON.parse(data) || []; //now it is an object
       appdata = data;
     }
 
@@ -68,7 +68,7 @@ client.once('ready', () => {
       console.log('module "'+mod_name+'" loaded')
     }
 
-    if(appdata['channels']['default']){
+    if(appdata['channels'] && appdata['channels']['default']){
       try{
         client.channels.get(appdata['channels']['default']).send(config.botname+' is nu online!');
       }
