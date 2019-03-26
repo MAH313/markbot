@@ -1,6 +1,9 @@
 /* The stats collection module*/
 
-module.exports.module_name = 'stats';
+module.exports.module_info = {
+  name: 'stats',
+  version: '1.0',
+}
 
 module.exports.module_data = {
 

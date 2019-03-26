@@ -1,5 +1,13 @@
 /* The main controller for the bot */
 
+const __INFO__ = {
+  'Name': 'Markbot',
+  'Version': '1.1',
+  'Author': 'MAH313 (a.k.a MaHo)',
+  'Github': 'https://github.com/MAH313/markbot',
+  'Licence': 'MIT',
+}
+
 //loading the discord module
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -24,9 +32,7 @@ modules = [];
 //a neat way to store data, this gets written to a file
 appdata = {};
 
-commands = [
-  'markbot help - toon deze lijst', 
-]
+commands = [];
 
 //helper functions
 
@@ -47,7 +53,8 @@ client.once('ready', () => {
 
   fs.readdirSync(normalizedPath).forEach(function(file) {
     mod = require("./modules/" + file);
-    modules[mod.module_name] = mod.module_data;
+    modules[mod.module_info.name] = mod.module_data;
+    modules[mod.module_info.name].__VERSION__ = mod.module_info.version || '';
     console.log('loaded: '+file);
   });
 
@@ -59,6 +66,11 @@ client.once('ready', () => {
       data = JSON.parse(data) || []; //now it is an object
       appdata = data;
     }
+
+    commands = [
+      (config.botname+' help - toon deze lijst'),
+      (config.botname+' info - Geef info over'+config.botname),
+    ]
 
     for(mod_name in modules){
       if(modules[mod_name].init){
@@ -133,6 +145,21 @@ client.on('message', message => {
       return;
     }
 
+    if(command_parts[1] == 'info'){
+      var output = '';
+      for(i in __INFO__){
+        output += i+': '+__INFO__[i]+'\n';
+      }
+
+      output += '\nLoaded modules:\n';
+
+      for(name in modules){
+        output += ' - '+name+' ('+modules[name].__VERSION__+')\n';
+      }
+      message.channel.send(output);
+      return;
+    }
+
     if(modules[command_parts[1]] && modules[command_parts[1]].onCommand){
       var result = modules[command_parts[1]].onCommand(command_parts, message);
 
@@ -162,6 +189,18 @@ client.on('message', message => {
     }
   }
 
+});
+
+client.on('error', function(err){
+  
+  if(err.error.code != 'ECONNRESET'){
+    console.error(err);
+    process.exit()
+  }
+  else{
+    console.error('ECONNRESET error')
+  }
+  
 });
 
 fs.readFile(config_file_name, 'utf8', function(err, data){

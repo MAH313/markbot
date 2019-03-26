@@ -1,6 +1,9 @@
 /* The interaction module*/
 
-module.exports.module_name = 'interactions';
+module.exports.module_info = {
+  name: 'interactions',
+  version: '0.3',
+}
 
 module.exports.module_data = {
 

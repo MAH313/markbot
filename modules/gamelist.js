@@ -1,6 +1,9 @@
 /* The game list module*/
 
-module.exports.module_name = 'gamelist';
+module.exports.module_info = {
+  name: 'gamelist',
+  version: '1.0',
+}
 
 module.exports.module_data = {
 
@@ -8,7 +11,7 @@ module.exports.module_data = {
 
   init: function(){
     commands.push(
-      '--- Game list module ---'
+      '--- Game list module ---',
       'markbot open [game] - open een game',
       'markbot join [game] - join een open game',
       'markbot leave [game] - verlaat een open game',
