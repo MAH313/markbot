@@ -57,7 +57,7 @@ module.exports.module_data = {
 
     appdata['log'].push(data);
 
-    helper.save();
+    //helper.save();
 
     return true;
   }

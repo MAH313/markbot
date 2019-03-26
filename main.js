@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.1',
+  'Version': '1.1.1',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',
@@ -69,7 +69,7 @@ client.once('ready', () => {
 
     commands = [
       (config.botname+' help - toon deze lijst'),
-      (config.botname+' info - Geef info over'+config.botname),
+      (config.botname+' info - Geef info over '+config.botname),
     ]
 
     for(mod_name in modules){

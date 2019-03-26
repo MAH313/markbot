@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'gamelist',
-  version: '1.0',
+  version: '1.1',
 }
 
 module.exports.module_data = {
@@ -12,13 +12,13 @@ module.exports.module_data = {
   init: function(){
     commands.push(
       '--- Game list module ---',
-      'markbot open [game] - open een game',
-      'markbot join [game] - join een open game',
-      'markbot leave [game] - verlaat een open game',
-      'markbot start [game] - start een open game',
-      'markbot cancel [game] - cancel een open game',
-      'markbot status [game] - geef info over een open game',
-      'markbot gamelist - toon alle bekende spellen'
+      config.botname+' open [game] - open een game',
+      config.botname+' join [game] - join een open game',
+      config.botname+' leave [game] - verlaat een open game',
+      config.botname+' start [game] - start een open game',
+      config.botname+' cancel [game] - cancel een open game',
+      config.botname+' status [game] - geef info over een open game',
+      config.botname+' gamelist - toon alle bekende spellen'
     )
   },
 
