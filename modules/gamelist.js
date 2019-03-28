@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'gamelist',
-  version: '1.1',
+  version: '1.2',
 }
 
 module.exports.module_data = {
@@ -26,18 +26,51 @@ module.exports.module_data = {
 
     switch(command_parts[1]){
       case 'gamelist':
-        var output = '';
-        for(i in appdata['games']){
-          output += appdata['games'][i]['name']+', min. players: '+
-                    (appdata['games'][i]['min'] || 'geen minimum')+', max. players: '+
-                    (appdata['games'][i]['max'] || 'geen maximum')+'\n'
-        }
 
-        if(output){
-          message.channel.send(output);
-        }
-        else{
-          message.channel.send('Ik heb geen games gevonden');
+        switch(command_parts[2]){
+          case 'add':
+            var new_name = command_parts[3];
+            var new_min = command_parts[4];
+            var new_max = command_parts[5];
+
+            if(new_name && !isNaN(new_min) && !isNaN(new_max)){
+              if(new_min > new_max){
+                var temp = new_min;
+                new_min = new_max;
+                new_max = temp;
+              }
+
+              if(appdata['games'][new_name]){
+                appdata['games'][new_name] = {"name":new_name,
+                                              "min":Number(new_min),
+                                              "max":Number(new_max)}
+                message.channel.send('Game \"'+new_name+'\" overschreven');
+              }
+              else{
+                appdata['games'][new_name] = {"name":new_name,
+                                              "min":Number(new_min),
+                                              "max":Number(new_max)}
+                message.channel.send('Game \"'+new_name+'\" toegevoegd');
+              }
+            }
+
+            break;
+
+          default:
+            var output = '';
+            for(i in appdata['games']){
+              output += appdata['games'][i]['name']+', min. players: '+
+                        (appdata['games'][i]['min'] || 'geen minimum')+', max. players: '+
+                        (appdata['games'][i]['max'] || 'geen maximum')+'\n'
+            }
+
+            if(output){
+              message.channel.send(output);
+            }
+            else{
+              message.channel.send('Ik heb geen games gevonden');
+            }
+            break;
         }
         
         return true;
