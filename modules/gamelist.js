@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'gamelist',
-  version: '1.2',
+  version: '1.2.1',
 }
 
 module.exports.module_data = {
@@ -52,6 +52,8 @@ module.exports.module_data = {
                                               "max":Number(new_max)}
                 message.channel.send('Game \"'+new_name+'\" toegevoegd');
               }
+
+              helper.save();
             }
 
             break;
