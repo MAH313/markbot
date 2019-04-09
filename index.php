@@ -7,7 +7,7 @@
   <!-- basic stats -->
   <section class='content'>
     <div class='row'>
-      <h1><span id='from_date'>Datum</span> tot en met <span id='to_date'>Datum</span></h1>
+      <h1><input type='date' id='from_input'> tot en met <input type='date' id='to_input'></h1>
     </div>
 
     <div class='row'>
@@ -106,6 +106,15 @@
       flex-wrap: wrap;
     }
 
+    input[type='date']{
+      border: none;
+
+      font-size: inherit;
+      font-weight: inherit;
+      font-family: inherit;
+      color: inherit;
+    }
+
   </style>
 
   <script type="text/javascript">
@@ -119,10 +128,15 @@
 
     var highestTotalCount = 0;
 
+    var from_input = document.getElementById('from_input');
+    var to_input = document.getElementById('to_input');
+
     function MakeHeatMap(now, lastweek){
 
       var dates = getDates(lastweek, now);
       var heatmapDOM = document.getElementById('heatmap');
+
+      heatmapDOM.innerHTML = '';
 
       for(var i in dates){
         var day;
@@ -319,20 +333,43 @@
       return dateArray;
     }
 
-    window.onload = function(){
+    function updateDate(now, lastweek){
 
+      MakeHeatMap(now, lastweek);
+      makePlayerList(now, lastweek);
+      makeChannelList(now, lastweek);
+
+      from_input.value = lastweek.getFullYear()+'-'+
+                   (lastweek.getMonth() < 9 ? '0' : '')+(lastweek.getMonth()+1)+'-'+
+                   (lastweek.getDate() < 10 ? '0' : '')+lastweek.getDate();
+      to_input.value = now.getFullYear()+'-'+
+                       (now.getMonth() < 9 ? '0' : '')+(now.getMonth()+1)+'-'+
+                       (now.getDate() < 10 ? '0' : '')+now.getDate();
+    }
+
+    function handleChange(){
+      if(from_input.value && to_input.value){
+        var now = new Date(to_input.value);
+        var lastweek = new Date(from_input.value);
+
+        updateDate(now, lastweek);
+      }
+    }
+
+    window.onload = function(){
       var now = new Date();
       var lastweek = new Date();
       lastweek.setDate(now.getDate() - 6);
 
       process_data();
-      MakeHeatMap(now, lastweek);
-      makePlayerList(now, lastweek);
-      makeChannelList(now, lastweek);
 
-      document.getElementById('from_date').innerHTML = lastweek.getDate()+'-'+(lastweek.getMonth()+1)+'-'+lastweek.getFullYear();
-      document.getElementById('to_date').innerHTML = now.getDate()+'-'+(now.getMonth()+1)+'-'+now.getFullYear();
+      from_input.onchange = handleChange;
+      to_input.onchange = handleChange;
+
+      updateDate(now, lastweek);
     }
+
+
 
   </script>
 
