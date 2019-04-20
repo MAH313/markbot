@@ -18,7 +18,8 @@ module.exports.module_data = {
       config.botname+' start [game] - start een open game',
       config.botname+' cancel [game] - cancel een open game',
       config.botname+' status [game] - geef info over een open game',
-      config.botname+' gamelist - toon alle bekende spellen'
+      config.botname+' gamelist - toon alle bekende spellen',
+      //config.botname+' gamelist add [naam] [min] [max]'
     )
   },
 
@@ -29,6 +30,11 @@ module.exports.module_data = {
 
         switch(command_parts[2]){
           case 'add':
+
+            if(appdata['channels']['admin'] && appdata['channels']['admin'] != message.channel.id){
+              return true;
+            }
+
             var new_name = command_parts[3];
             var new_min = command_parts[4];
             var new_max = command_parts[5];
