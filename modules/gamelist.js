@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'gamelist',
-  version: '1.2.1',
+  version: '1.2.2',
 }
 
 module.exports.module_data = {
@@ -121,8 +121,8 @@ module.exports.module_data = {
               message.channel.send('<@'+message.author.id+'> doet mee met '+
                                     appdata['games'][command_parts[2]]['name']+
                                     (full ? ', '+appdata['games'][command_parts[2]]['name']+' is nu vol' : 
-                                            (needed ? ', nog '+needed+' mensen nodig' : '')+
-                                            (left ? ', nog '+left+' plekken over' : '')));
+                                            (needed > 0 ? ', nog '+needed+' mensen nodig' : '')+
+                                            (left > 0 ? ', nog '+left+' plekken over' : '')));
             }
             else{
               message.channel.send('<@'+message.author.id+'> sorry maar '+appdata['games'][command_parts[2]]['name']+' is al vol');
