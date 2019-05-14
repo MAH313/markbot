@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'interactions',
-  version: '0.4',
+  version: '0.5',
 }
 
 module.exports.module_data = {
@@ -39,6 +39,10 @@ module.exports.module_data = {
         return true;
       }
     }
+  },
+
+  onNewMember: function(member){
+    channel.send(`Welkom, ${member}, ik ben `+config.botname+`.`);
   }
 }
 

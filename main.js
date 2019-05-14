@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.1.1',
+  'Version': '1.2.0',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',
@@ -100,7 +100,7 @@ client.once('ready', () => {
 client.on('message', message => {
   message.content = message.content.toLowerCase()
 
-  if(message.author.username == config.botname){
+  if(message.author.bot){
     return;
   }
 
@@ -191,11 +191,21 @@ client.on('message', message => {
 
 });
 
+// Create an event listener for new guild members
+client.on('guildMemberAdd', member => {
+  for(mod_name in modules){
+    if(modules[mod_name].onMessage){
+      var result = modules[mod_name].onNewMember(member);
+    }
+  }
+});
+
 client.on('error', function(err){
-  
+  helper.save();
+  client.users.get(appdata['SAU_id']).send(JSON.stringify(err));
   if(err.error.code != 'ECONNRESET'){
     console.error(err);
-    process.exit()
+    process.exit();
   }
   else{
     console.error('ECONNRESET error')
