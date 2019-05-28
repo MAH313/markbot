@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.2.0',
+  'Version': '1.3.0',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',
@@ -32,16 +32,35 @@ modules = [];
 //a neat way to store data, this gets written to a file
 appdata = {};
 
+freshData = {};
+
 commands = [];
 
 //helper functions
 
 helper = {
   save: function(dontlog) {
+    if(!appdata){
+      return;
+    }
     fs.writeFile(config.storagefile+'.json', JSON.stringify(appdata), 'utf8', function(err){
       if (err) throw err;
       if(!dontlog) console.log('The file has been saved!');
     });
+  },
+
+  sendMessage: function(message){
+    if(appdata['channels'] && appdata['channels']['default']){
+      try{
+        client.channels.get(appdata['channels']['default']).send(message);
+      }
+      catch(error){
+        console.log('No valid default channel set ('+error+')');
+      }
+    }
+    else{
+      console.log('No default channel set');
+    }
   }
 }
 
@@ -53,6 +72,9 @@ client.once('ready', () => {
 
   fs.readdirSync(normalizedPath).forEach(function(file) {
     mod = require("./modules/" + file);
+    if(modules[mod.module_info.name]){
+      throw new Error('Confliction module name "'+mod.module_info.name+'", please resolve this issue by renaming or removing on or more conflicting modules');
+    }
     modules[mod.module_info.name] = mod.module_data;
     modules[mod.module_info.name].__VERSION__ = mod.module_info.version || '';
     console.log('loaded: '+file);
@@ -63,7 +85,14 @@ client.once('ready', () => {
     if (err){
       console.log(err);
     } else {
-      data = JSON.parse(data) || []; //now it is an object
+      try{
+        data = JSON.parse(data) || {}; //now it is an object
+      }
+      catch(error){
+        data = {};
+        console.warn('error while loading json, data might be empty or corrupt. Loaded empty data.');
+      }
+      
       appdata = data;
     }
 
@@ -79,6 +108,8 @@ client.once('ready', () => {
 
       console.log('module "'+mod_name+'" loaded')
     }
+
+    setInterval(everyHour, 3600000);/*3600000*/
 
     if(appdata['channels'] && appdata['channels']['default']){
       try{
@@ -98,14 +129,16 @@ client.once('ready', () => {
 });
 
 client.on('message', message => {
-  message.content = message.content.toLowerCase()
+  message.rawcontent = message.content;
+  message.content = message.content.toLowerCase();
+
 
   if(message.author.bot){
     return;
   }
 
   if(appdata['SAU_id'] == message.author.id || (!appdata['SAU_id'] && message.author.username == config.superAdminName)){
-    //person bound commands (SUPER ADMIN ONLY!!)
+    //person bound commands (SUPER ADMIN)
 
     if(!appdata['SAU_id']){
       appdata['SAU_id'] = message.author.id;
@@ -113,11 +146,19 @@ client.on('message', message => {
 
     switch(message.content){
       case config.botname+' channel admin':
+        if(!appdata['channels']){
+          appdata['channels'] = {};
+        }
+
         appdata['channels']['admin'] = message.channel.id;
         helper.save();
         return;
         break;
       case config.botname+' channel default':
+        if(!appdata['channels']){
+          appdata['channels'] = {};
+        }
+
         appdata['channels']['default'] = message.channel.id;
         helper.save();
         return;
@@ -199,6 +240,21 @@ client.on('guildMemberAdd', member => {
     }
   }
 });
+
+function everyHour(){
+  
+  var date = new Date()
+
+  for(mod_name in modules){
+    if(modules[mod_name].onHour){
+      var result = modules[mod_name].onHour(date);
+    }
+  }
+
+  helper.save(false);
+
+  console.log(date.toString());
+}
 
 client.on('error', function(err){
   helper.save();

@@ -17,14 +17,6 @@ module.exports.module_data = {
 
     )
 
-    setInterval(function(){
-      helper.save(false);
-
-      var date = new Date()
-
-      console.log(date.toString());
-    }, 3600000)
-
     if(!appdata['stats_info']){
       appdata['stats_info'] = {
         'users': [],
