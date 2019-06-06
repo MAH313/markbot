@@ -39,6 +39,6 @@ Drop any compatible modules in the 'modules' folder and run/restart the bot. An 
 
 ## Credits
 
-*[Node.js](https://nodejs.org/)
-*[Discord.js](https://discord.js.org/)
-*MAH313 (aka MaHo)
+* [Node.js](https://nodejs.org/)
+* [Discord.js](https://discord.js.org/)
+* MAH313 (aka MaHo)

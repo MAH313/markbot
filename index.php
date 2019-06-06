@@ -2,8 +2,15 @@
 <html>
 <head>
   <title>Mark bot stats interface</title>
+
+  <link type="text/css" rel="stylesheet" href='./normalize.css'>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
 </head>
 <body>
+  <header>
+    <h1>Markbot statistieken</h1>
+  </header>
+
   <!-- basic stats -->
   <section class='content'>
     <div class='row'>
@@ -11,7 +18,7 @@
     </div>
 
     <div class='row'>
-      <table>
+      <table class='heatmap'>
         <thead>
           <tr>
             <th>Dag</th>
@@ -48,7 +55,7 @@
     </div>
 
     <div class='row'>
-      <table>
+      <table class='list'>
         <thead>
           <tr>
             <th colspan="2">Gebruikers</th>
@@ -63,7 +70,7 @@
         </tbody>
       </table>
 
-      <table>
+      <table class='list'>
         <thead>
           <tr>
             <th colspan="2">Kanalen</th>
@@ -80,23 +87,26 @@
     </div>
   </section>
 
+  <footer>
+    <p>&copy; MAH313 (aka MaHo) 2019, <a href='https://github.com/MAH313/markbot'>GitHub</a></p>
+  </footer>
+
   <style>
 
-    td[data-heat]{
-      width: 2em;
-      height: 2em;
+    body{
+      font-family: 'Roboto Condensed', sans-serif;
+      background-color: #E9E9E9;
     }
 
     th, td{
       text-align: center;
     }
 
-    section.content > div.row > table{
-      display: inline-block;
-    }
-
     section.content{
-      width: 100%;
+      width: 80%;
+      margin-left: 10%;
+      background-color: white;
+      padding: 0.25em;
     }
 
     section.content > div.row{
@@ -104,6 +114,15 @@
       align-content: start;
       display: flex;
       flex-wrap: wrap;
+      padding-top: 2em;
+    }
+
+    section.content > div.row:last-child{
+      padding-bottom: 1em;
+    }
+
+    section.content > div.row > *{
+      margin: 0 auto;
     }
 
     input[type='date']{
@@ -113,6 +132,57 @@
       font-weight: inherit;
       font-family: inherit;
       color: inherit;
+    }
+
+    header{
+      width: 100%;
+      padding: 0.5em 10% 0.25em;
+      background-color: #FFFFFF;
+    }
+
+    header h1{
+      margin: 0.5em 0 0 0.25em;
+    }
+
+    table.heatmap{
+      border-collapse: collapse;
+    }
+
+    table.heatmap td, table.heatmap th{
+      border-right: 1px solid rgba(0,0,0,0.1);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      width: 2em;
+      height: 2em;
+    }
+
+    table.heatmap tr:last-child > td{
+      border-bottom: none;
+    }
+
+    table.heatmap td:last-child, table.heatmap th:last-child{
+      border-right: none;
+    }
+
+    footer{
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    table.list{
+      min-width: 20em;
+      border-collapse: collapse;
+    }
+
+    table.list td{
+      padding: 0.3em 0;
+    }
+
+    table.list tbody tr:not(:last-child){
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    table.list thead tr:last-child{
+      border-bottom: 1px solid rgba(0,0,0,0.375);
     }
 
   </style>
@@ -155,7 +225,7 @@
             }
             else{
               var alpha = day[hour]['total_messages']/highestTotalCount;
-              tr += '<td data-heat="'+day[hour]['total_messages']+'" style="background-color: rgba(255,0,0,'+alpha+')"></td>';
+              tr += '<td data-heat="'+day[hour]['total_messages']+'" title="'+day[hour]['total_messages']+'" style="background-color: rgba(255,0,0,'+alpha+')"></td>';
             }
           }
         }
