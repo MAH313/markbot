@@ -267,8 +267,15 @@ function everyHour(){
 }
 
 client.on('error', function(err){
-  helper.save();
-  client.users.get(appdata['SAU_id']).send(JSON.stringify(err));
+  
+  try{
+    client.users.get(appdata['SAU_id']).send(JSON.stringify(err));
+  }
+  catch(error){
+    console.error(err);
+    process.exit();
+  }
+  
   if(err.error.code != 'ECONNRESET'){
     console.error(err);
     process.exit();
@@ -276,6 +283,8 @@ client.on('error', function(err){
   else{
     console.error('ECONNRESET error')
   }
+
+  helper.save();
   
 });
 
