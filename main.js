@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.4.1',
+  'Version': '1.4.2',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',
@@ -106,10 +106,20 @@ client.once('ready', () => {
         modules[mod_name].init();
       }
 
-      console.log('module "'+mod_name+'" loaded')
+      console.log('module "'+mod_name+'" initiated')
     }
 
-    setInterval(everyHour, 3600000);/*3600000*/
+    var date = new Date();
+    var min = date.getMinutes();
+    var sec = date.getSeconds();
+
+    setTimeout(
+      function(){
+        everyHour();
+        setInterval(everyHour, 3600000);/*3600000*/
+      },
+      (60*((60-min))+(60-sec))*1000
+    );
 
     if(appdata['channels'] && appdata['channels']['default']){
       try{
@@ -274,7 +284,10 @@ fs.readFile(config_file_name, 'utf8', function(err, data){
     if(err.code == 'ENOENT'){
       console.log('Creating configuration file, please fill it out');
 
-      fs.writeFile(config_file_name, JSON.stringify({botname: 'markbot', superAdminName: '', storagefile: 'botdata', botkey: ''}), 'utf8', function(err){
+      fs.writeFile(config_file_name, JSON.stringify({botname: 'markbot',
+                                                     superAdminName: '',
+                                                     storagefile: 'botdata',
+                                                     botkey: ''}), 'utf8', function(err){
         if (err) throw err;
       });
     }
