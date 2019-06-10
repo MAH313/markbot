@@ -261,7 +261,7 @@ function everyHour(){
     }
   }
 
-  helper.save(false);
+  helper.save(true);
 
   console.log(date.toString());
 }
@@ -283,8 +283,6 @@ client.on('error', function(err){
   else{
     console.error('ECONNRESET error')
   }
-
-  helper.save();
   
 });
 
