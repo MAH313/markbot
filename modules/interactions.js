@@ -60,6 +60,7 @@ function includesFromArray(haystack, needles){
         break;
       }
     }
+  }
   catch(error){
     return false
   }
