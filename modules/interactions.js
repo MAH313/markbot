@@ -47,6 +47,10 @@ module.exports.module_data = {
 }
 
 function includesFromArray(haystack, needles){
+  if(!haystack || !needles || typeof haystack != 'string'){
+    return false;
+  }
+
   var result = false;
 
   for(i in needles){
