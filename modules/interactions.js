@@ -51,13 +51,17 @@ function includesFromArray(haystack, needles){
     return false;
   }
 
-  var result = false;
+  try{
+    var result = false;
 
-  for(i in needles){
-    if(haystack.lower().includes(needles[i])){
-      result = true;
-      break;
+    for(i in needles){
+      if(haystack.lower().includes(needles[i])){
+        result = true;
+        break;
+      }
     }
+  catch(error){
+    return false
   }
 
   return result;
