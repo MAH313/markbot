@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.4.2',
+  'Version': '1.4.3',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',
@@ -120,18 +120,19 @@ client.once('ready', () => {
       },
       (60*((60-min))+(60-sec))*1000
     );
-
-    if(appdata['channels'] && appdata['channels']['default']){
-      try{
-        client.channels.get(appdata['channels']['default']).send(config.botname+' is nu online!');
+    if(process.argv.indexOf('silent') == -1){
+      if(appdata['channels'] && appdata['channels']['default']){
+        try{
+          client.channels.get(appdata['channels']['default']).send(config.botname+' is nu online!');
+        }
+        catch(error){
+          console.log('No valid default channel set ('+error+')');
+        }
+        
       }
-      catch(error){
-        console.log('No valid default channel set ('+error+')');
+      else{
+        console.log('No default channel set');
       }
-      
-    }
-    else{
-      console.log('No default channel set');
     }
 
     console.log('Ready!');
