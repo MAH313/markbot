@@ -6,7 +6,7 @@ const {google} = require('googleapis');
 
 module.exports.module_info = {
   name: 'calendar',
-  version: '0.4',
+  version: '0.5',
 }
 
 module.exports.module_data = {
@@ -61,7 +61,11 @@ module.exports.module_data = {
             output += 'Ik heb '+events.length+' event'+(events.length != 1 ? 's':'')+':\n';
             for(i in events){
 
-              output += buildMessage(events[i])+'\n'
+              var eventstring = buildMessage(events[i]);
+              
+              if(eventstring){
+                output += eventstring+'\n';
+              }
               //output += i+1+') '+events[i].summary+ (events[i].description ? ': '+events[i].description : '') + events[i].htmlLink+'\n';
             }
           } else {
@@ -103,8 +107,11 @@ module.exports.module_data = {
           if (events.length) {
             output += 'Ik heb vandaag '+events.length+' event'+(events.length != 1 ? 's':'')+':\n';
             for(i in events){
+              var eventstring = buildMessage(events[i]);
 
-              output += buildMessage(events[i])+'\n'
+              if(eventstring){
+                output += eventstring+'\n';
+              }
               //output += i+1+') '+events[i].summary+ (events[i].description ? ': '+events[i].description : '') + events[i].htmlLink+'\n';
             }
           }
@@ -121,14 +128,31 @@ module.exports.module_data = {
 function buildMessage(event){
   str = '';
 
+  var settings = checkOptions(event.description);
+
+  //console.log(settings);
+
+  if(settings && settings['options'] && settings['options']['nomessage']){
+    return false;
+  }
+
   start = formatDate(event.start);
   end = formatDate(event.end);
 
   str += '**'+event.summary+'**\n';
   str += start + (start != end ? ' tot '+end : '' )+'\n';
-  str += (event.description ? event.description+'\n' : '');
-  /*str += event.htmlLink;*/
+  str += (settings['remains'] ? settings['remains']+'\n' : '');
 
+  if(settings && settings['options'] && settings['options']['offline']){
+    str += 'Offline: ';
+    for(var i in settings['options']['offline']){
+      str += '**'+settings['options']['offline'][i]+'** ' 
+    }
+    str += '\n';
+  }
+
+  /*str += event.htmlLink;*/
+  
   return str;
 }
 
@@ -159,4 +183,39 @@ function getTimeFromString(designations){
   }
 
   return output;
+}
+
+function checkOptions(string){
+  if(!string){
+    return {};
+  }
+
+  var raw_options = string.match(/[\w\:\s#]+;/g);
+  var options = {}
+
+  for(var i in raw_options){
+    var parts = raw_options[i].match(/[\w#]+/g);
+    switch(parts[0].trim()){
+      case 'nomessage':
+        options['nomessage'] = true;
+        break;
+
+      case 'offline':
+        options['offline'] = [];
+        if(parts[1]){
+          for(var j = 1; j < parts.length; j+=1){
+            options['offline'].push(parts[j]);
+          }
+        }
+    }
+  }
+
+  var remains = string.replace(/[\w\:\s#]+;/g, '');
+
+  return {
+    'original': string,
+    'raw_options': raw_options,
+    'options': options,
+    'remains': remains.trim()
+  }
 }
