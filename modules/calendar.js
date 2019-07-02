@@ -6,7 +6,7 @@ const {google} = require('googleapis');
 
 module.exports.module_info = {
   name: 'calendar',
-  version: '0.5',
+  version: '0.5.1',
 }
 
 module.exports.module_data = {
@@ -138,9 +138,20 @@ function buildMessage(event){
 
   start = formatDate(event.start);
   end = formatDate(event.end);
+  daydiff = null;
+
+  if(start.length == 10 && end.length == 10){
+    startparts = start.match(/([0-9]{2})-([0-9]{2})-([0-9]{4})/i);
+    endparts = end.match(/([0-9]{2})-([0-9]{2})-([0-9]{4})/i);
+
+    startdate = new Date(startparts[3], startparts[2], startparts[1]);
+    enddate = new Date(endparts[3], endparts[2], endparts[1]);
+
+    daydiff = (enddate-startdate)/86400000;
+  }
 
   str += '**'+event.summary+'**\n';
-  str += start + (start != end ? ' tot '+end : '' )+'\n';
+  str += start + ((start != end && daydiff !== 1) ? ' tot '+end : '' )+'\n';
   str += (settings['remains'] ? settings['remains']+'\n' : '');
 
   if(settings && settings['options'] && settings['options']['offline']){
