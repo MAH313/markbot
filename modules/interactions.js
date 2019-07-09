@@ -2,14 +2,19 @@
 
 module.exports.module_info = {
   name: 'interactions',
-  version: '0.5',
+  version: '0.5.1',
 }
 
 module.exports.module_data = {
 
   blockWords: [
     'ziekenhuis',
-    'morfine'
+    'morfine',
+    'depressie',
+    'bezig',
+    'aan het werk',
+    'moe',
+    'verdrietig'
   ],
 
   init: function(){
@@ -33,7 +38,7 @@ module.exports.module_data = {
       message.channel.send('doei '+message.author.username);
       return true;
     }
-    else if(matches && (!actionRandNum || true)){
+    else if(matches && !actionRandNum){
       if((matches[1].match(/(\w+)/g)).length <= 10 && !includesFromArray(matches[1], this.blockWords)){
         message.channel.send('Hallo '+matches[1]+', ik ben '+config.botname);
         return true;
