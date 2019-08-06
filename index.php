@@ -331,6 +331,49 @@
       document.getElementById('channellist').innerHTML = list;
     }
 
+    function hourly_average(now, lastweek){
+      var list = '';
+      var dates = getDates(lastweek, now);
+
+      var hourArray = [];
+
+      var highestTotal = 0;
+
+      for(var hour = 0; hour < 24; hour++){
+        hourArray[hour] = 0;
+      }
+
+      for(var i in dates){
+        var day;
+        try{
+          day = timeSlots[dates[i].getFullYear()][dates[i].getMonth()][dates[i].getDate()];
+        }
+        catch(error){
+        }
+
+        if(day){
+          for(var hour = 0; hour < 24; hour++){
+            if(day[hour] && day[hour]['total_messages']){
+              hourArray[hour] += day[hour]['total_messages'];
+
+              if(hourArray[hour] > highestTotal){
+                highestTotal = hourArray[hour];
+              }
+            }
+          }
+        }
+      }
+      list = '<tr><th>~</th>'
+      for(var key in hourArray){
+        var alpha = hourArray[key]/highestTotal;
+        list += '<td title="'+hourArray[key]+'" style="background-color: rgba(255,0,0,'+alpha+'); border-top: 2px solid black;"></td>';
+      }
+
+      list += '</tr>';
+      
+      document.getElementById('heatmap').innerHTML += list;
+    }
+
     function process_data(){
       for(var i in message_log){
         var message = message_log[i];
@@ -408,6 +451,7 @@
       MakeHeatMap(now, lastweek);
       makePlayerList(now, lastweek);
       makeChannelList(now, lastweek);
+      hourly_average(now, lastweek);
 
       from_input.value = lastweek.getFullYear()+'-'+
                    (lastweek.getMonth() < 9 ? '0' : '')+(lastweek.getMonth()+1)+'-'+
