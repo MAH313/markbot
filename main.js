@@ -61,6 +61,19 @@ helper = {
     else{
       console.log('No default channel set');
     }
+  },
+
+  sendMessageOnChannel: function(message, channel){
+    if(!channel){
+      this.sendMessage(message);
+    }
+
+    try{
+        client.channels.get(channel).send(message);
+    }
+    catch(error){
+      console.log('Invalid channel ('+error+')');
+    }
   }
 }
 
@@ -174,6 +187,15 @@ client.on('message', message => {
         helper.save();
         return;
         break;
+      case config.botname+' channel feed':
+        if(!appdata['channels']){
+          appdata['channels'] = {};
+        }
+
+        appdata['channels']['feed'] = message.channel.id;
+        helper.save();
+        return;
+        break;
       case config.botname+' force save':
         helper.save();
         return;
@@ -263,8 +285,6 @@ function everyHour(){
   }
 
   helper.save(true);
-
-  console.log(date.toString());
 }
 
 client.on('error', function(err){
