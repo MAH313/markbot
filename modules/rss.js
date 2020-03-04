@@ -39,7 +39,9 @@ module.exports.module_data = {
 
   onHour: function(date){
     feednum = 0;
-    this.readFeed(config.feeds[feednum]);
+    if(config.feeds && config.feeds[feednum]){
+      this.readFeed(config.feeds[feednum]);
+    }
   },
 
   readFeed: function(url){
