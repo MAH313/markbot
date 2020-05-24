@@ -52,7 +52,9 @@ helper = {
   sendMessage: function(message){
     if(appdata['channels'] && appdata['channels']['default']){
       try{
-        client.channels.get(appdata['channels']['default']).send(message);
+        client.channels.fetch(appdata['channels']['default']).then(function(channel){
+          channel.send(message);
+        });
       }
       catch(error){
         console.log('No valid default channel set ('+error+')');
@@ -63,13 +65,15 @@ helper = {
     }
   },
 
-  sendMessageOnChannel: function(message, channel){
-    if(!channel){
+  sendMessageOnChannel: function(message, channel_id){
+    if(!channel_id){
       this.sendMessage(message);
     }
 
     try{
-        client.channels.get(channel).send(message);
+        client.channels.fetch(channel_id).then(function(channel){
+          channel.send(message);
+        });
     }
     catch(error){
       console.log('Invalid channel ('+error+')');
@@ -136,7 +140,9 @@ client.once('ready', () => {
     if(process.argv.indexOf('silent') == -1){
       if(appdata['channels'] && appdata['channels']['default']){
         try{
-          client.channels.get(appdata['channels']['default']).send(config.botname+' is nu online!');
+          client.channels.fetch(appdata['channels']['default']).then(function(channel){
+            channel.send(config.botname+' is nu online!');
+          });
         }
         catch(error){
           console.log('No valid default channel set ('+error+')');
