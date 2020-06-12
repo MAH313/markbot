@@ -2,7 +2,7 @@
 
 const __INFO__ = {
   'Name': 'Markbot',
-  'Version': '1.4.3',
+  'Version': '1.5',
   'Author': 'MAH313 (a.k.a MaHo)',
   'Github': 'https://github.com/MAH313/markbot',
   'Licence': 'MIT',

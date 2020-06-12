@@ -6,7 +6,7 @@ const {google} = require('googleapis');
 
 module.exports.module_info = {
   name: 'calendar',
-  version: '0.5.1',
+  version: '1.0',
 }
 
 module.exports.module_data = {

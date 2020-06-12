@@ -2,7 +2,7 @@
 
 module.exports.module_info = {
   name: 'interactions',
-  version: '0.5.1',
+  version: '1',
 }
 
 module.exports.module_data = {

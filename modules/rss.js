@@ -5,7 +5,7 @@ var feednum = 0;
 
 module.exports.module_info = {
   name: 'RSS',
-  version: '0.1',
+  version: '0.5',
 }
 
 module.exports.module_data = {
