@@ -15,35 +15,38 @@ module.exports.module_data = {
 
   onCommand: async function(command_parts, message){
     try{
-    if(command_parts[1] == 'voice'){
+      if(command_parts[1] == 'voice'){
 
-      var voiceChannel = message.member.voice.channel;
+        var voiceChannel = message.member.voice.channel;
 
-     
+        if(voiceChannel){
 
-      //voiceChannel.join()
-      var check = message.rawcontent.match(/(youtube\..+\/watch\?v=|youtu\.be\/|)([A-Za-z0-9\-\_]{9,})/)
-      var videoID = check[2];
-      if(videoID){
-        //const dispatcher = connection.playFile('/home/mark/private/discord_bot_live/audio/black_sabbath-war_pigs.mp3');
-        const stream = ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
-        const dispatcher = connection.play(stream, this.streamOptions);
+          var check = message.rawcontent.match(/(youtube\..+\/watch\?v=|youtu\.be\/|)([A-Za-z0-9\-\_]{9,})/)
+          var videoID = check[2];
+          if(videoID){
+            const stream = ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
+
+            if(stream){
+              const connection = await voiceChannel.join();
+              const dispatcher = connection.play(stream, this.streamOptions);
+
+              dispatcher.on("debug", debug => {console.log(debug);});
+              dispatcher.on("finish", end => {console.log('stream has ended'); voiceChannel.leave();});
+              dispatcher.on('error', function(error){console.error(error); voiceChannel.leave();});
+            }
+            else{
+              message.channel.send('Die kan ik niet openen, check of het een geldige video is');
+            }
+          }
+          else{
+            message.channel.send('Dat gaat niet lukken, geef mij een youtube url.');
+          }
+        }
+        else{
+          message.channel.send('Je moet eerst in een spraak kanaal zitten');
+        }
       
-<<<<<<< HEAD
-        //dispatcher.on("debug", debug => {console.log(debug);});
-        dispatcher.on("finish", end => {console.log('Stream has ended'); voiceChannel.leave();});
-        dispatcher.on('error', function(error){console.error('stream error', error); voiceChannel.leave();});
-=======
-        dispatcher.on("debug", debug => {console.log(debug);});
-        dispatcher.on("finish", end => {console.log('stream has ended'); voiceChannel.leave();});
-        dispatcher.on('error', function(error){console.error(error); voiceChannel.leave();});
->>>>>>> 058cd03ec4bc84dbabf0621f0b52e70a2b47146c
       }
-      else{
-        message.channel.send('Dat gaat niet lukken, geef mij een youtube url.');
-      }
-    
-    }
     }
     catch(error){
       console.error(error);
