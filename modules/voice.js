@@ -24,11 +24,11 @@ module.exports.module_data = {
           var check = message.rawcontent.match(/(youtube\..+\/watch\?v=|youtu\.be\/|)([A-Za-z0-9\-\_]{9,})/)
           var videoID = check[2];
           if(videoID){
-            const stream = ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
+            const stream = await ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
 
             if(stream){
               const connection = await voiceChannel.join();
-              const dispatcher = connection.play(stream, this.streamOptions);
+              const dispatcher = await connection.play(stream, this.streamOptions);
 
               dispatcher.on("debug", debug => {console.log(debug);});
               dispatcher.on("finish", end => {console.log('stream has ended'); voiceChannel.leave();});
