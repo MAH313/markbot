@@ -14,6 +14,7 @@ module.exports.module_data = {
   },
 
   onCommand: async function(command_parts, message){
+    try{
     if(command_parts[1] == 'voice'){
 
       var voiceChannel = message.member.voice.channel;
@@ -28,14 +29,24 @@ module.exports.module_data = {
         const stream = ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
         const dispatcher = connection.play(stream, this.streamOptions);
       
+<<<<<<< HEAD
         //dispatcher.on("debug", debug => {console.log(debug);});
         dispatcher.on("finish", end => {console.log('Stream has ended'); voiceChannel.leave();});
         dispatcher.on('error', function(error){console.error('stream error', error); voiceChannel.leave();});
+=======
+        dispatcher.on("debug", debug => {console.log(debug);});
+        dispatcher.on("finish", end => {console.log('stream has ended'); voiceChannel.leave();});
+        dispatcher.on('error', function(error){console.error(error); voiceChannel.leave();});
+>>>>>>> 058cd03ec4bc84dbabf0621f0b52e70a2b47146c
       }
       else{
         message.channel.send('Dat gaat niet lukken, geef mij een youtube url.');
       }
     
+    }
+    }
+    catch(error){
+      console.error(error);
     }
   },
 
