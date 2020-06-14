@@ -18,7 +18,7 @@ module.exports.module_data = {
 
       var voiceChannel = message.member.voice.channel;
 
-      const connection = await voiceChannel.join();
+     
 
       //voiceChannel.join()
       var check = message.rawcontent.match(/(youtube\..+\/watch\?v=|youtu\.be\/|)([A-Za-z0-9\-\_]{9,})/)
@@ -28,9 +28,9 @@ module.exports.module_data = {
         const stream = ytdl('https://youtu.be/'+videoID, { filter : 'audioonly' });
         const dispatcher = connection.play(stream, this.streamOptions);
       
-        dispatcher.on("debug", debug => {console.log(debug);});
-        dispatcher.on("finish", end => {voiceChannel.leave();});
-        dispatcher.on('error', function(error){console.error(error); voiceChannel.leave();});
+        //dispatcher.on("debug", debug => {console.log(debug);});
+        dispatcher.on("finish", end => {console.log('Stream has ended'); voiceChannel.leave();});
+        dispatcher.on('error', function(error){console.error('stream error', error); voiceChannel.leave();});
       }
       else{
         message.channel.send('Dat gaat niet lukken, geef mij een youtube url.');
