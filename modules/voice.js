@@ -14,6 +14,7 @@ module.exports.module_data = {
   },
 
   onCommand: async function(command_parts, message){
+    try{
     if(command_parts[1] == 'voice'){
 
       var voiceChannel = message.member.voice.channel;
@@ -29,13 +30,17 @@ module.exports.module_data = {
         const dispatcher = connection.play(stream, this.streamOptions);
       
         dispatcher.on("debug", debug => {console.log(debug);});
-        dispatcher.on("finish", end => {voiceChannel.leave();});
+        dispatcher.on("finish", end => {console.log('stream has ended'); voiceChannel.leave();});
         dispatcher.on('error', function(error){console.error(error); voiceChannel.leave();});
       }
       else{
         message.channel.send('Dat gaat niet lukken, geef mij een youtube url.');
       }
     
+    }
+    }
+    catch(error){
+      console.error(error);
     }
   },
 

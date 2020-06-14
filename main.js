@@ -89,12 +89,14 @@ client.once('ready', () => {
 
   fs.readdirSync(normalizedPath).forEach(function(file) {
     mod = require("./modules/" + file);
+    if(mod.module_info && mod.module_info.name){
     if(modules[mod.module_info.name]){
       throw new Error('Confliction module name "'+mod.module_info.name+'", please resolve this issue by renaming or removing on or more conflicting modules');
     }
     modules[mod.module_info.name] = mod.module_data;
     modules[mod.module_info.name].__VERSION__ = mod.module_info.version || '';
     console.log('loaded: '+file);
+    }
   });
 
 
