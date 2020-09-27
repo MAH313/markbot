@@ -3,8 +3,7 @@
 ## Introduction
 
 MarkBot is a discord bot based on discord.js. Its target is to offer a all in one bot by using a modular setup and an easy way to add new and/or custom modules.
-This README covers the MarkBot core. The core does not offer much functionality except some base commands like 'help' and 'info' (see usage for more info). For more info about the individual modules and info about writing your own modules, see the 'modules' folder.
-
+This README covers the MarkBot core. The core does not offer much functionality except some base commands like 'help' and 'info'.
 ## Instalation
 
 Markbot requires Node.js and Discord.js to run. additional modules might have additional requirements. These are listed in their respective readme files.
