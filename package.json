@@ -1,0 +1,15 @@
+{
+  "name": "markbot",
+  "version": "1.0.0",
+  "description": "## Introduction",
+  "main": "main.js",
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js"
+  },
+  "author": "MaHo",
+  "license": "GPL-3.0-or-later"
+}

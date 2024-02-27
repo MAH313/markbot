@@ -9,8 +9,14 @@ const __INFO__ = {
 }
 
 //loading the discord module
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, GatewayIntentBits, Partials, Events} = require('discord.js');
+
+const client = new Client({ intents: [
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.MessageContent,
+  GatewayIntentBits.GuildMembers,
+] });
 
 //loading the filesystem module
 const fs = require('fs');
@@ -84,7 +90,7 @@ helper = {
 /* pre init */
 
 // init
-client.once('ready', () => {
+client.once(Events.ClientReady, () => {
   var normalizedPath = path.join(__dirname, "modules");
 
   fs.readdirSync(normalizedPath).forEach(function(file) {
@@ -140,9 +146,9 @@ client.once('ready', () => {
       (60*((60-min))+(60-sec))*1000
     );
     if(process.argv.indexOf('silent') == -1){
-      if(appdata['channels'] && appdata['channels']['default']){
+      if(config?.default_channel){
         try{
-          client.channels.fetch(appdata['channels']['default']).then(function(channel){
+          client.channels.fetch(config.default_channel).then(function(channel){
             channel.send(config.botname+' is nu online!');
           });
         }
@@ -160,10 +166,9 @@ client.once('ready', () => {
   });
 });
 
-client.on('message', message => {
+client.on(Events.MessageCreate, message => {
   message.rawcontent = message.content;
   message.content = message.content.toLowerCase();
-
 
   if(message.author.bot){
     return;
@@ -215,7 +220,7 @@ client.on('message', message => {
     }
   }
 
-  if(message.content.match(new RegExp('^'+config.botname))){
+  if(message.content.match(new RegExp('^'+config.botname.toLowerCase()))){
     var command_parts = message.content.match(/(\w+)/g);
 
     if(command_parts[1] == 'help'){
@@ -274,7 +279,7 @@ client.on('message', message => {
 });
 
 // Create an event listener for new guild members
-client.on('guildMemberAdd', member => {
+client.on(Events.GuildMemberAdd, member => {
   for(mod_name in modules){
     if(modules[mod_name].onMessage){
       var result = modules[mod_name].onNewMember(member);
@@ -295,7 +300,7 @@ function everyHour(){
   helper.save(true);
 }
 
-client.on('error', function(err){
+client.on(Events.Error, function(err){
   
   try{
     client.users.get(appdata['SAU_id']).send(JSON.stringify(err));

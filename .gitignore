@@ -1,3 +1,5 @@
 datareference.js
 botdata.json
 config.json
+package-lock.json
+node_modules/
