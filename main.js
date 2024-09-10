@@ -1,11 +1,11 @@
 /* The main controller for the bot */
 
 const __INFO__ = {
-  'Name': 'Markbot',
-  'Version': '1.5',
+  'Name': 'Kroketbot',
+  'Version': '0.1',
   'Author': 'MAH313 (a.k.a MaHo)',
-  'Github': 'https://github.com/MAH313/markbot',
-  'Licence': 'MIT',
+  'Github': 'https://github.com/MAH313/markbot/tree/kroketbot',
+  'Licence': 'GNU 3',
 }
 
 //loading the discord module
@@ -16,6 +16,7 @@ const client = new Client({ intents: [
   GatewayIntentBits.GuildMessages,
   GatewayIntentBits.MessageContent,
   GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.GuildVoiceStates
 ] });
 
 //loading the filesystem module
@@ -286,6 +287,14 @@ client.on(Events.GuildMemberAdd, member => {
     }
   }
 });
+
+client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+  for(mod_name in modules){
+    if(modules[mod_name].onVoiceStateUpdate){
+      var result = modules[mod_name].onVoiceStateUpdate(oldState, newState);
+    }
+  }
+})
 
 function everyHour(){
   
